@@ -1,37 +1,78 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using StackExchange.Redis;
 
 namespace Valuator.Pages;
 
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
+    private readonly IDatabase _redisDb;
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis)
     {
         _logger = logger;
+        _redisDb = redis.GetDatabase();
     }
 
-    public void OnGet()
+    public async Task<IActionResult> OnPostAsync(string text)
     {
-
-    }
-
-    public IActionResult OnPost(string text)
-    {
-        _logger.LogDebug(text);
-
         string id = Guid.NewGuid().ToString();
 
-        string textKey = "TEXT-" + id;
-        // TODO: (pa1) сохранить в БД (Redis) text по ключу textKey
+        // Сохранение текста
+       
+        // Расчет Rank
+        double rank = CalculateRank(text);
+        _redisDb.StringSet($"RANK-{id}", rank.ToString());
 
-        string rankKey = "RANK-" + id;
-        // TODO: (pa1) посчитать rank и сохранить в БД (Redis) по ключу rankKey
-
-        string similarityKey = "SIMILARITY-" + id;
-        // TODO: (pa1) посчитать similarity и сохранить в БД (Redis) по ключу similarityKey
+        double similarity = CalculateSimilarityAsync(text);
+        _redisDb.StringSet($"SIMILARITY-{id}", similarity.ToString());
+        _redisDb.StringSet($"TEXT-{id}", text != null ? text : "");
 
         return Redirect($"summary?id={id}");
     }
+
+    private double CalculateSimilarityAsync(string currentText)
+    {
+        var keys = _redisDb.Multiplexer.GetServer(_redisDb.Multiplexer.GetEndPoints().First()).Keys(pattern: "TEXT-*");
+
+        foreach (var key in keys)
+        {
+           try
+            {
+                var storedText = _redisDb.StringGet(key);
+                if (storedText == currentText)
+                {
+                    return 1;
+                }
+            } catch(Exception ex)
+            {
+                continue;
+            }
+        }
+
+        return 0;
+    }
+
+    private double CalculateRank(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return 0;
+
+        int nonAlphabeticCount = 0;
+        foreach (char c in text)
+        {
+            if (!IsAlphabetic(c))
+                nonAlphabeticCount++;
+        }
+        return (double)nonAlphabeticCount / text.Length;
+    }
+
+    private bool IsAlphabetic(char c)
+    {
+        // Проверка на русские и латинские буквы
+        return char.IsLetter(c) &&
+               (c <= 0x007F ||  // ASCII
+                c >= 0x0410 && c <= 0x044F); // Русские буквы
+    }
+
 }
