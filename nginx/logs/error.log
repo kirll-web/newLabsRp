@@ -1,0 +1,140 @@
+2025/03/03 09:12:56 [notice] 24396#25248: using inherited sockets from "X:\nginx"
+2025/03/03 09:12:56 [emerg] 24396#25248: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:12:56 [emerg] 24396#25248: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:12:56 [emerg] 24396#25248: CreateFile() "X:\newLabsRP\nginx/conf/mime.types" failed (2: The system cannot find the file specified) in X:\newLabsRP\nginx/conf/nginx.conf:8
+2025/03/03 09:13:15 [notice] 9696#25636: using inherited sockets from "X:\nginx"
+2025/03/03 09:13:15 [emerg] 9696#25636: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:13:15 [emerg] 9696#25636: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:13:15 [emerg] 9696#25636: CreateFile() "X:\newLabsRP\nginx/conf/mime.types" failed (2: The system cannot find the file specified) in X:\newLabsRP\nginx/conf/nginx.conf:8
+2025/03/03 09:13:31 [notice] 25464#26580: using inherited sockets from "X:\nginx"
+2025/03/03 09:13:31 [emerg] 25464#26580: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:13:31 [emerg] 25464#26580: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:13:31 [emerg] 25464#26580: CreateFile() "X:\newLabsRP\nginx/conf/mime.types" failed (2: The system cannot find the file specified) in X:\newLabsRP\nginx/conf/nginx.conf:8
+2025/03/03 09:13:47 [notice] 27164#13768: using inherited sockets from "X:\nginx"
+2025/03/03 09:13:47 [emerg] 27164#13768: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:13:47 [emerg] 27164#13768: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:13:47 [emerg] 27164#13768: CreateFile() "X:\newLabsRP\nginx/conf/mime.types" failed (2: The system cannot find the file specified) in X:\newLabsRP\nginx/conf/nginx.conf:8
+2025/03/03 09:13:54 [notice] 5220#26952: using inherited sockets from "X:\nginx"
+2025/03/03 09:13:54 [emerg] 5220#26952: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:13:54 [emerg] 5220#26952: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:13:54 [emerg] 5220#26952: CreateFile() "X:\newLabsRP\nginx/conf/mime.types" failed (2: The system cannot find the file specified) in X:\newLabsRP\nginx/conf/nginx.conf:8
+2025/03/03 09:15:32 [notice] 2668#20684: using inherited sockets from "X:\nginx"
+2025/03/03 09:15:32 [emerg] 2668#20684: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:15:32 [emerg] 2668#20684: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:15:32 [notice] 28288#21992: using inherited sockets from "X:\nginx"
+2025/03/03 09:15:32 [emerg] 28288#21992: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:15:32 [emerg] 28288#21992: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:16:41 [notice] 20144#25812: using inherited sockets from "X:\nginx"
+2025/03/03 09:16:41 [emerg] 20144#25812: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:16:41 [emerg] 20144#25812: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:16:41 [notice] 24208#26692: using inherited sockets from "X:\nginx"
+2025/03/03 09:16:41 [emerg] 24208#26692: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:16:41 [emerg] 24208#26692: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:16:58 [error] 24208#26752: *4 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:8081/", host: "localhost:8080"
+2025/03/03 09:19:53 [notice] 23764#9848: using inherited sockets from "X:\nginx"
+2025/03/03 09:19:53 [emerg] 23764#9848: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:19:53 [emerg] 23764#9848: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:19:53 [notice] 26604#3476: using inherited sockets from "X:\nginx"
+2025/03/03 09:19:53 [emerg] 26604#3476: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:19:53 [emerg] 26604#3476: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:20:17 [error] 26604#27492: *4 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:8081/", host: "localhost:8080"
+2025/03/03 09:20:19 [error] 26604#27492: *4 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:8082/", host: "localhost:8080"
+2025/03/03 09:27:58 [notice] 25524#24448: using inherited sockets from "X:\nginx"
+2025/03/03 09:27:58 [emerg] 25524#24448: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:27:58 [emerg] 25524#24448: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:27:58 [notice] 14272#22788: using inherited sockets from "X:\nginx"
+2025/03/03 09:27:58 [emerg] 14272#22788: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:27:58 [emerg] 14272#22788: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:28:09 [error] 14272#25412: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://[::1]:5002/", host: "localhost:8081"
+2025/03/03 09:28:23 [error] 14272#25412: *18 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/03 09:29:36 [notice] 25120#26384: using inherited sockets from "X:\nginx"
+2025/03/03 09:29:36 [emerg] 25120#26384: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:29:36 [emerg] 25120#26384: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:29:36 [notice] 23648#24956: using inherited sockets from "X:\nginx"
+2025/03/03 09:29:36 [emerg] 23648#24956: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:29:36 [emerg] 23648#24956: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:29:56 [error] 23648#26364: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/03 09:31:41 [notice] 18912#23676: using inherited sockets from "X:\nginx"
+2025/03/03 09:31:41 [emerg] 18912#23676: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:31:41 [emerg] 18912#23676: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:31:41 [notice] 9684#28064: using inherited sockets from "X:\nginx"
+2025/03/03 09:31:41 [emerg] 9684#28064: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:31:41 [emerg] 9684#28064: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:32:02 [notice] 1560#16640: using inherited sockets from "X:\nginx"
+2025/03/03 09:32:02 [emerg] 1560#16640: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:32:02 [emerg] 1560#16640: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:32:02 [notice] 15176#9700: using inherited sockets from "X:\nginx"
+2025/03/03 09:32:02 [emerg] 15176#9700: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:32:02 [emerg] 15176#9700: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:32:33 [error] 9684#5064: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/03 09:35:21 [notice] 22080#26416: using inherited sockets from "X:\nginx"
+2025/03/03 09:35:21 [emerg] 22080#26416: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:35:21 [emerg] 22080#26416: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:35:21 [notice] 28452#24140: using inherited sockets from "X:\nginx"
+2025/03/03 09:35:21 [emerg] 28452#24140: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:35:21 [emerg] 28452#24140: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:37:27 [notice] 22836#20144: using inherited sockets from "X:\nginx"
+2025/03/03 09:37:27 [emerg] 22836#20144: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:37:27 [emerg] 22836#20144: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:37:27 [notice] 27300#25744: using inherited sockets from "X:\nginx"
+2025/03/03 09:37:27 [emerg] 27300#25744: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:37:27 [emerg] 27300#25744: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:38:01 [notice] 25100#23116: using inherited sockets from "X:\nginx"
+2025/03/03 09:38:01 [emerg] 25100#23116: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:38:01 [emerg] 25100#23116: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:38:01 [notice] 21224#10444: using inherited sockets from "X:\nginx"
+2025/03/03 09:38:01 [emerg] 21224#10444: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:38:01 [emerg] 21224#10444: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:38:20 [error] 21224#18396: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/03 09:38:31 [error] 21224#18396: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5001/", host: "localhost:8080"
+2025/03/03 09:38:33 [error] 21224#18396: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/03 09:38:38 [notice] 15548#22108: using inherited sockets from "X:\nginx"
+2025/03/03 09:38:38 [emerg] 15548#22108: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:38:38 [emerg] 15548#22108: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:38:38 [notice] 23204#8692: using inherited sockets from "X:\nginx"
+2025/03/03 09:38:38 [emerg] 23204#8692: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:38:38 [emerg] 23204#8692: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:38:47 [notice] 20544#23740: using inherited sockets from "X:\nginx"
+2025/03/03 09:38:47 [emerg] 20544#23740: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:38:47 [emerg] 20544#23740: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:38:47 [notice] 8312#25676: using inherited sockets from "X:\nginx"
+2025/03/03 09:38:47 [emerg] 8312#25676: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:38:47 [emerg] 8312#25676: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:39:14 [notice] 540#7308: using inherited sockets from "X:\nginx"
+2025/03/03 09:39:14 [emerg] 540#7308: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:39:14 [emerg] 540#7308: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:39:14 [emerg] 540#7308: invalid URL prefix in X:\newLabsRP\nginx/conf/nginx.conf:30
+2025/03/03 09:40:20 [notice] 17876#28408: using inherited sockets from "X:\nginx"
+2025/03/03 09:40:20 [emerg] 17876#28408: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:40:20 [emerg] 17876#28408: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:40:20 [emerg] 17876#28408: invalid URL prefix in X:\newLabsRP\nginx/conf/nginx.conf:30
+2025/03/03 09:40:26 [notice] 10144#25308: using inherited sockets from "X:\nginx"
+2025/03/03 09:40:26 [emerg] 10144#25308: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:40:26 [emerg] 10144#25308: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:40:26 [emerg] 10144#25308: invalid URL prefix in X:\newLabsRP\nginx/conf/nginx.conf:30
+2025/03/03 09:43:06 [notice] 16196#28360: using inherited sockets from "X:\nginx"
+2025/03/03 09:43:06 [emerg] 16196#28360: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:43:06 [emerg] 16196#28360: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:43:06 [notice] 9600#1680: using inherited sockets from "X:\nginx"
+2025/03/03 09:43:06 [emerg] 9600#1680: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:43:06 [emerg] 9600#1680: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:43:55 [notice] 16284#15164: using inherited sockets from "X:\nginx"
+2025/03/03 09:43:55 [emerg] 16284#15164: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:43:55 [emerg] 16284#15164: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:43:55 [notice] 6772#15840: using inherited sockets from "X:\nginx"
+2025/03/03 09:43:55 [emerg] 6772#15840: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/03 09:43:55 [emerg] 6772#15840: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/03 09:44:09 [error] 6772#27572: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/03 09:44:21 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5002/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:23 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5002/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:25 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5003/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:28 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5004/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:30 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5004/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:43 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5004/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:45 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5001/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:47 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5003/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:49 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5004/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:51 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:53 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5003/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:55 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5002/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/03 09:44:57 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5002/", host: "localhost:8080", referrer: "http://localhost:8080/"
