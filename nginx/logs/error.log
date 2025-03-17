@@ -138,3 +138,38 @@
 2025/03/03 09:44:53 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5003/", host: "localhost:8080", referrer: "http://localhost:8080/"
 2025/03/03 09:44:55 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:5002/", host: "localhost:8080", referrer: "http://localhost:8080/"
 2025/03/03 09:44:57 [error] 6772#27572: *6 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5002/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:29:25 [notice] 4456#9952: using inherited sockets from "X:\nginx"
+2025/03/06 08:29:25 [emerg] 4456#9952: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:29:25 [emerg] 4456#9952: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:29:25 [notice] 12648#14076: using inherited sockets from "X:\nginx"
+2025/03/06 08:29:25 [emerg] 12648#14076: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:29:25 [emerg] 12648#14076: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:30:26 [notice] 18512#22260: using inherited sockets from "X:\nginx"
+2025/03/06 08:30:26 [emerg] 18512#22260: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:30:26 [emerg] 18512#22260: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:30:26 [notice] 468#20016: using inherited sockets from "X:\nginx"
+2025/03/06 08:30:26 [emerg] 468#20016: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:30:26 [emerg] 468#20016: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:31:04 [error] 12648#13404: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/06 08:31:06 [error] 12648#13404: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /lib/bootstrap/dist/css/bootstrap.min.css HTTP/1.1", upstream: "http://[::1]:5002/lib/bootstrap/dist/css/bootstrap.min.css", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:31:06 [error] 12648#13404: *4 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /Valuator.styles.css?v=oX0i0ioYG3SwKG24OTlK9jvPA2-I23bJOUrpKcL9h1E HTTP/1.1", upstream: "http://[::1]:5003/Valuator.styles.css?v=oX0i0ioYG3SwKG24OTlK9jvPA2-I23bJOUrpKcL9h1E", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:31:06 [error] 12648#13404: *3 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /lib/bootstrap/dist/js/bootstrap.bundle.min.js HTTP/1.1", upstream: "http://[::1]:5004/lib/bootstrap/dist/js/bootstrap.bundle.min.js", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:32:57 [notice] 6148#13832: using inherited sockets from "X:\nginx"
+2025/03/06 08:32:57 [emerg] 6148#13832: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:32:57 [emerg] 6148#13832: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:32:57 [notice] 7860#21776: using inherited sockets from "X:\nginx"
+2025/03/06 08:32:57 [emerg] 7860#21776: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:32:57 [emerg] 7860#21776: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:33:26 [error] 7860#4292: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/03/06 08:33:36 [error] 7860#4292: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "POST / HTTP/1.1", upstream: "http://[::1]:5002/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:33:39 [error] 7860#4292: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /summary?id=59ab5539-c039-40b2-a8b1-85353ea417c9 HTTP/1.1", upstream: "http://[::1]:5003/summary?id=59ab5539-c039-40b2-a8b1-85353ea417c9", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:33:46 [error] 7860#4292: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5004/", host: "localhost:8080"
+2025/03/06 08:51:55 [notice] 9428#11692: using inherited sockets from "X:\nginx"
+2025/03/06 08:51:55 [emerg] 9428#11692: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:51:55 [emerg] 9428#11692: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:51:55 [notice] 12488#5452: using inherited sockets from "X:\nginx"
+2025/03/06 08:51:55 [emerg] 12488#5452: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/03/06 08:51:55 [emerg] 12488#5452: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/03/06 08:52:23 [error] 12488#24560: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "POST / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:52:26 [error] 12488#24560: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /summary?id=df8c0887-b827-4458-b1f0-44d69899c5e2 HTTP/1.1", upstream: "http://[::1]:5002/summary?id=df8c0887-b827-4458-b1f0-44d69899c5e2", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/03/06 08:52:32 [error] 12488#24560: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5003/", host: "localhost:8080"
