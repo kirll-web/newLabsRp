@@ -8,4 +8,11 @@ start "Valuator 5004" dotnet run --urls "http://0.0.0.0:5004"
 cd ../nginx
 start nginx.exe
 
+cd ../Consumer1
+
+dotnet restore
+
+dotnet run
+
+
 cd ../scripts

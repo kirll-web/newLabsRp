@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Valuator.Pages;
 public class SummaryModel : PageModel
@@ -28,9 +30,16 @@ public class SummaryModel : PageModel
         string rankKey = "RANK-" + id;
         string similarityKey = "SIMILARITY-" + id;
 
-        string rankValue = _redisDb.StringGet(rankKey);
-        string similarityValue = _redisDb.StringGet(similarityKey);
+        string rankValue =  await _redisDb.StringGetAsync(rankKey);
 
+        while (rankValue == null)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            rankValue = await _redisDb.StringGetAsync(rankKey);
+        }
+        _logger.LogInformation($"OnGetAsync: {id}, {rankValue}");
+        string similarityValue = _redisDb.StringGet(similarityKey);
+        Console.WriteLine($"OnGetAsync: {rankValue}");
         Rank = double.Parse(rankValue);
         Similarity = double.Parse(similarityValue);
     }

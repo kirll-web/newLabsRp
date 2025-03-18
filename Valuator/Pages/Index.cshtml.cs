@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using StackExchange.Redis;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Valuator.Pages;
 
@@ -8,28 +13,88 @@ public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
     private readonly IDatabase _redisDb;
+    private readonly ConnectionFactory _factory;
+    private const string QueueName = "valuator.processing.rank";
 
     public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis)
     {
         _logger = logger;
         _redisDb = redis.GetDatabase();
+        _factory = new ConnectionFactory { HostName = "localhost" };
     }
 
     public async Task<IActionResult> OnPostAsync(string text)
     {
         string id = Guid.NewGuid().ToString();
 
-        // Сохранение текста
-       
-        // Расчет Rank
-        double rank = CalculateRank(text);
-        _redisDb.StringSet($"RANK-{id}", rank.ToString());
+        _redisDb.StringSet($"TEXT-{id}", text);
+        await SendMessageToQueue($"{id}", text);
 
         double similarity = CalculateSimilarityAsync(text);
         _redisDb.StringSet($"SIMILARITY-{id}", similarity.ToString());
         _redisDb.StringSet($"TEXT-{id}", text != null ? text : "");
 
         return Redirect($"summary?id={id}");
+    }
+
+    private async Task SendMessageToQueue(string id, string text)
+    {
+        CancellationTokenSource cts = new CancellationTokenSource();
+        Task produceTask = ProduceAsync(cts.Token, id, text);
+
+        await produceTask; // Дожидаемся завершения ProduceAsync
+        cts.Cancel();
+        _logger.LogInformation($"Sent message: {id}, {text}");
+    }
+
+
+    private async Task ProduceAsync(CancellationToken ct, string id, string text)
+    {
+        // Установка соединения с RabbitMQ по адресу localhost:5672
+        ConnectionFactory factory = new ConnectionFactory
+        {
+            HostName = "localhost"
+        };
+        await using IConnection connection = await factory.CreateConnectionAsync(ct);
+        await using IChannel channel = await connection.CreateChannelAsync(null, ct);
+
+        await DeclareTopologyAsync(channel, ct);
+
+        // Отправка сообщения ежесекундно в цикле.
+        ulong count = 0;
+        string message = $"{id}|{text}";
+        byte[] body = Encoding.UTF8.GetBytes(message);
+
+        await channel.BasicPublishAsync(
+            exchange: "",
+            routingKey: QueueName,
+            mandatory: false,
+            body: body
+        );
+
+        _logger.LogInformation($"ProduceAsync Sent message: {id}, {text}");
+        await connection.CloseAsync(ct);
+    }
+
+    private static async Task DeclareTopologyAsync(IChannel channel, CancellationToken ct)
+    {
+        await channel.ExchangeDeclareAsync(
+            exchange: QueueName,
+            type: ExchangeType.Direct,
+            cancellationToken: ct
+        );
+        await channel.QueueDeclareAsync(
+            queue: QueueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            cancellationToken: ct
+        );
+        await channel.QueueBindAsync(
+            queue: QueueName,
+            exchange: QueueName,
+            routingKey: "",
+            cancellationToken: ct);
     }
 
     private double CalculateSimilarityAsync(string currentText)
