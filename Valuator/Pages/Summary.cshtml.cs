@@ -29,7 +29,7 @@ public class SummaryModel : PageModel
     {
         string rankKey = "RANK-" + id;
         string similarityKey = "SIMILARITY-" + id;
-
+        _logger.LogInformation($"OnGetAsync: {"RANK-" + id}");
         string rankValue =  await _redisDb.StringGetAsync(rankKey);
 
         while (rankValue == null)

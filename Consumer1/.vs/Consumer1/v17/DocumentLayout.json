@@ -1,7 +1,18 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "X:\\newLabsRP\\Consumer1\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C31D630A-10D9-4EAD-9E8E-5596435D5833}|Consumer1.csproj|x:\\newlabsrp\\consumer1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C31D630A-10D9-4EAD-9E8E-5596435D5833}|Consumer1.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|X:\\newLabsRP\\rabbitmq_example\\Consumer\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|X:\\newLabsRP\\rabbitmq_example\\Producer\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +20,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 405,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +33,45 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "X:\\newLabsRP\\rabbitmq_example\\Producer\\Program.cs",
+              "RelativeDocumentMoniker": "..\\rabbitmq_example\\Producer\\Program.cs",
+              "ToolTip": "X:\\newLabsRP\\rabbitmq_example\\Producer\\Program.cs",
+              "RelativeToolTip": "..\\rabbitmq_example\\Producer\\Program.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAACoAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T15:49:54.251Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "X:\\newLabsRP\\rabbitmq_example\\Consumer\\Program.cs",
+              "RelativeDocumentMoniker": "..\\rabbitmq_example\\Consumer\\Program.cs",
+              "ToolTip": "X:\\newLabsRP\\rabbitmq_example\\Consumer\\Program.cs",
+              "RelativeToolTip": "..\\rabbitmq_example\\Consumer\\Program.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAAYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T15:49:42.805Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "X:\\newLabsRP\\Consumer1\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "X:\\newLabsRP\\Consumer1\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAiwEEAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T15:32:41.903Z",
+              "EditorCaption": ""
             }
           ]
         },

@@ -14,67 +14,54 @@ namespace RankCalculator
         {
             Console.WriteLine("Consumer started");
 
-            ConnectionFactory factory = new ConnectionFactory
+            var factory = new ConnectionFactory
             {
-                HostName = "localhost",
+                HostName = "localhost"
             };
-            ConnectionMultiplexer redis = await ConnectionMultiplexer.ConnectAsync("localhost");
+
+            var redis = await ConnectionMultiplexer.ConnectAsync("localhost");
             _redisDb = redis.GetDatabase();
-            await using IConnection connection = await factory.CreateConnectionAsync();
-            await using IChannel channel = await connection.CreateChannelAsync();
+
+            var connection = await factory.CreateConnectionAsync();
+            var channel = await connection.CreateChannelAsync();
 
             await DeclareTopologyAsync(channel);
-            string consumerTag = await RunConsumer(channel);
+            await RunConsumer(channel);
 
             Console.WriteLine("Press Enter to exit");
             Console.ReadLine();
-
-            await channel.BasicCancelAsync(consumerTag);
-
-            Console.WriteLine("done");
         }
 
-        private static async Task<string> RunConsumer(IChannel channel)
+        private static async Task RunConsumer(IChannel channel)
         {
-            AsyncEventingBasicConsumer consumer = new(channel);
-            consumer.ReceivedAsync += (_, eventArgs) => ConsumeAsync(channel, eventArgs);
-            return await channel.BasicConsumeAsync(
+            var consumer = new AsyncEventingBasicConsumer(channel);
+            consumer.ReceivedAsync += async (_, eventArgs) =>
+            {
+                Console.WriteLine("Consuming");
+                string message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+                Console.WriteLine($"Consuming: {message} from queue {QueueName}");
+
+                string[] parts = message.Split('|');
+                if (parts.Length != 2) return;
+
+                string id = parts[0];
+                string text = parts[1];
+
+                double rank = CalculateRank(text);
+                await _redisDb.StringSetAsync($"RANK-{id}", rank.ToString());
+
+                Console.WriteLine($"Computed rank: {rank} for id: {id}");
+
+                await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
+            };
+
+            await channel.BasicConsumeAsync(
                 queue: QueueName,
-                autoAck: false,
+                autoAck: false, // Подтверждаем обработку вручную
                 consumer: consumer
             );
         }
 
-        private static async Task ConsumeAsync(IChannel channel, BasicDeliverEventArgs eventArgs)
-        {
-            Console.WriteLine("Consuming");
-            string message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-            Console.WriteLine($"1 Consuming: {message} from subject {eventArgs.Exchange}");
-
-            string[] parts = message.Split('|');
-            if (parts.Length != 2) return;
-            Console.WriteLine($"ConsumeAsync: 2 ");
-            string id = parts[0];
-            string text = parts[1];
-            Console.WriteLine($"ConsumeAsync: 3 {text}");
-            double rank = CalculateRank(text);
-            Console.WriteLine($"ConsumeAsync: 4 {text}");
-            Console.WriteLine($"ConsumeAsync: 5 {text} {rank}");
-            await _redisDb.StringSetAsync($"RANK-{id}", rank.ToString());
-
-            string rankValue = _redisDb.StringGet($"RANK-{id}");
-            Console.WriteLine($"6 ConsumeAsync: RANK-{text} { rankValue}");
-
-            Console.WriteLine($"7 Computed rank: {rank} for id: {id}");
-
-            await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
-
-        }
-
-
-        /// <summary>
-        ///  Определяет топологию: queue -> consumer.
-        /// </summary>
         private static async Task DeclareTopologyAsync(IChannel channel)
         {
             await channel.QueueDeclareAsync(
@@ -100,11 +87,8 @@ namespace RankCalculator
 
         private static bool IsAlphabetic(char c)
         {
-            // Проверка на русские и латинские буквы
             return char.IsLetter(c) &&
-                   (c <= 0x007F ||  // ASCII
-                    c >= 0x0410 && c <= 0x044F); // Русские буквы
+                   (c <= 0x007F || c >= 0x0410 && c <= 0x044F);
         }
     }
-
 }
