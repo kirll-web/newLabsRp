@@ -62,8 +62,7 @@
               "RelativeToolTip": "Consumer\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T15:31:48.196Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-18T15:31:48.196Z"
             },
             {
               "$type": "Document",
@@ -75,8 +74,7 @@
               "RelativeToolTip": "Valuator\\Pages\\Summary.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-18T03:32:24.804Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-18T03:32:24.804Z"
             },
             {
               "$type": "Document",
@@ -100,8 +98,7 @@
               "RelativeToolTip": "Valuator\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-17T20:15:42.244Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-17T20:15:42.244Z"
             },
             {
               "$type": "Document",
@@ -111,7 +108,7 @@
               "RelativeDocumentMoniker": "Valuator\\Pages\\Index.cshtml.cs",
               "ToolTip": "X:\\newLabsRP\\Valuator\\Pages\\Index.cshtml.cs",
               "RelativeToolTip": "Valuator\\Pages\\Index.cshtml.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAywBsAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAADcAAAAAAAAAAAASwEYAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-17T19:50:07.567Z",
               "EditorCaption": ""
@@ -134,9 +131,9 @@
               "Title": "Summary.cshtml.cs",
               "DocumentMoniker": "X:\\newLabsRP\\Valuator\\Pages\\Summary.cshtml.cs",
               "RelativeDocumentMoniker": "Valuator\\Pages\\Summary.cshtml.cs",
-              "ToolTip": "X:\\newLabsRP\\Valuator\\Pages\\Summary.cshtml.cs*",
-              "RelativeToolTip": "Valuator\\Pages\\Summary.cshtml.cs*",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAxwCIAAAAhAAAAAAAAAA==",
+              "ToolTip": "X:\\newLabsRP\\Valuator\\Pages\\Summary.cshtml.cs",
+              "RelativeToolTip": "Valuator\\Pages\\Summary.cshtml.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAxwBkAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-17T20:47:00.442Z",
               "EditorCaption": ""

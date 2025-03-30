@@ -38,16 +38,11 @@ namespace RankCalculator
             consumer.ReceivedAsync += async (_, eventArgs) =>
             {
                 Console.WriteLine("Consuming");
-                string message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-                Console.WriteLine($"Consuming: {message} from queue {QueueName}");
+                string id = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+                Console.WriteLine($"Consuming: {id} from queue {QueueName}");
 
-                string[] parts = message.Split('|');
-                if (parts.Length != 2) return;
 
-                string id = parts[0];
-                string text = parts[1];
-
-                double rank = CalculateRank(text);
+                double rank = CalculateRank(id);
                 await _redisDb.StringSetAsync($"RANK-{id}", rank.ToString());
 
                 Console.WriteLine($"Computed rank: {rank} for id: {id}");
@@ -57,7 +52,7 @@ namespace RankCalculator
 
             await channel.BasicConsumeAsync(
                 queue: QueueName,
-                autoAck: false, // Подтверждаем обработку вручную
+                autoAck: false, 
                 consumer: consumer
             );
         }
@@ -72,8 +67,11 @@ namespace RankCalculator
             );
         }
 
-        private static double CalculateRank(string text)
+        private static double CalculateRank(string id)
         {
+            Console.WriteLine($"CalculateRank id {id}");
+            string text = _redisDb.StringGet($"TEXT-{id}");
+            Console.WriteLine($"CalculateRank text {text}");
             if (string.IsNullOrEmpty(text)) return 0;
 
             int nonAlphabeticCount = 0;

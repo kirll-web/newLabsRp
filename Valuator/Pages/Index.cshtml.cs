@@ -27,8 +27,11 @@ public class IndexModel : PageModel
     {
         string id = Guid.NewGuid().ToString();
 
-        _redisDb.StringSet($"TEXT-{id}", text);
-        await SendMessageToQueue($"{id}", text);
+        await _redisDb.StringSetAsync($"TEXT-{id}", text);
+        _logger.LogInformation($"OnPostAsync: {id}");
+
+        await SendMessageToQueue($"{id}");
+
 
         double similarity = CalculateSimilarityAsync(text);
         _redisDb.StringSet($"SIMILARITY-{id}", similarity.ToString());
@@ -37,18 +40,18 @@ public class IndexModel : PageModel
         return Redirect($"summary?id={id}");
     }
 
-    private async Task SendMessageToQueue(string id, string text)
+    private async Task SendMessageToQueue(string id)
     {
         CancellationTokenSource cts = new CancellationTokenSource();
-        Task produceTask = ProduceAsync(cts.Token, id, text);
+        Task produceTask = ProduceAsync(cts.Token, id);
 
         await produceTask; // Дожидаемся завершения ProduceAsync
         cts.Cancel();
-        _logger.LogInformation($"Sent message: {id}, {text}");
+        _logger.LogInformation($"Sent message: {id}");
     }
 
 
-    private async Task ProduceAsync(CancellationToken ct, string id, string text)
+    private async Task ProduceAsync(CancellationToken ct, string id)
     {
         // Установка соединения с RabbitMQ по адресу localhost:5672
         ConnectionFactory factory = new ConnectionFactory
@@ -61,8 +64,7 @@ public class IndexModel : PageModel
         await DeclareTopologyAsync(channel, ct);
 
         // Отправка сообщения ежесекундно в цикле.
-        ulong count = 0;
-        string message = $"{id}|{text}";
+        string message = $"{id}";
         byte[] body = Encoding.UTF8.GetBytes(message);
 
         await channel.BasicPublishAsync(
@@ -72,7 +74,7 @@ public class IndexModel : PageModel
             body: body
         );
 
-        _logger.LogInformation($"ProduceAsync Sent message: {id}, {text}");
+        _logger.LogInformation($"ProduceAsync Sent message: {id}");
         await connection.CloseAsync(ct);
     }
 
