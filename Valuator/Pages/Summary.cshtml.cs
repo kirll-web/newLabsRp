@@ -39,6 +39,7 @@ public class SummaryModel : PageModel
         }
         _logger.LogInformation($"OnGetAsync: {id}, {rankValue}");
         string similarityValue = _redisDb.StringGet(similarityKey);
+        _logger.LogInformation($"id : {id}SIMILARITY: {similarityValue}");
         Console.WriteLine($"OnGetAsync: {rankValue}");
         Rank = double.Parse(rankValue);
         Similarity = double.Parse(similarityValue);

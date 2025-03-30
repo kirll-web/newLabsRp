@@ -15,6 +15,9 @@ public class IndexModel : PageModel
     private readonly IDatabase _redisDb;
     private readonly ConnectionFactory _factory;
     private const string QueueName = "valuator.processing.rank";
+    private const string QueueEvents = "valuator.events";
+    private const string SimilirityEvent = "SimilarityCalculated";
+    private const string exchangeName = "events";
 
     public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis)
     {
@@ -26,16 +29,12 @@ public class IndexModel : PageModel
     public async Task<IActionResult> OnPostAsync(string text)
     {
         string id = Guid.NewGuid().ToString();
-
-        await _redisDb.StringSetAsync($"TEXT-{id}", text);
-        _logger.LogInformation($"OnPostAsync: {id}");
-
-        await SendMessageToQueue($"{id}");
-
-
         double similarity = CalculateSimilarityAsync(text);
         _redisDb.StringSet($"SIMILARITY-{id}", similarity.ToString());
         _redisDb.StringSet($"TEXT-{id}", text != null ? text : "");
+        await SendSimilirityEvent(id, similarity);
+
+        await SendMessageToQueue($"{id}");
 
         return Redirect($"summary?id={id}");
     }
@@ -47,7 +46,6 @@ public class IndexModel : PageModel
 
         await produceTask; // Дожидаемся завершения ProduceAsync
         cts.Cancel();
-        _logger.LogInformation($"Sent message: {id}");
     }
 
 
@@ -74,7 +72,39 @@ public class IndexModel : PageModel
             body: body
         );
 
-        _logger.LogInformation($"ProduceAsync Sent message: {id}");
+        await connection.CloseAsync(ct);
+    }
+
+    private async Task SendSimilirityEvent(string id, double similarity)
+    {
+        CancellationTokenSource cts = new CancellationTokenSource();
+        Task produceTask = ProduceSimilirityEvent(cts.Token, id, similarity);
+        
+        await produceTask; 
+        cts.Cancel();
+    }
+
+    private async Task ProduceSimilirityEvent(CancellationToken ct, string id, double similarity)
+    {
+        ConnectionFactory factory = new ConnectionFactory
+        {
+            HostName = "localhost"
+        };
+        await using IConnection connection = await factory.CreateConnectionAsync(ct);
+        await using IChannel channel = await connection.CreateChannelAsync(null, ct);
+
+        await DeclareTopologyAsyncForSimilirityEvents(channel, ct);
+
+        string message = $"{id}|{similarity}";
+        byte[] body = Encoding.UTF8.GetBytes(message);
+
+        await channel.BasicPublishAsync(
+            exchange: exchangeName,
+            routingKey: SimilirityEvent,
+            mandatory: false,
+            body: body
+        );
+
         await connection.CloseAsync(ct);
     }
 
@@ -99,20 +129,44 @@ public class IndexModel : PageModel
             cancellationToken: ct);
     }
 
+    private static async Task DeclareTopologyAsyncForSimilirityEvents(IChannel channel, CancellationToken ct)
+    {
+        await channel.ExchangeDeclareAsync(
+            exchange: exchangeName,
+            type: ExchangeType.Direct,
+            durable: true, // Добавьте это!
+            cancellationToken: ct
+        );
+        await channel.QueueDeclareAsync(
+            queue: QueueEvents,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            cancellationToken: ct
+        );
+        await channel.QueueBindAsync(
+            queue: QueueEvents,
+            exchange: exchangeName,
+            routingKey: SimilirityEvent,
+            cancellationToken: ct);
+    }
+
     private double CalculateSimilarityAsync(string currentText)
     {
         var keys = _redisDb.Multiplexer.GetServer(_redisDb.Multiplexer.GetEndPoints().First()).Keys(pattern: "TEXT-*");
 
         foreach (var key in keys)
         {
-           try
+            try
             {
                 var storedText = _redisDb.StringGet(key);
                 if (storedText == currentText)
                 {
+                    _logger.LogInformation($"2 id: {storedText} text: {currentText} SIMILARITY: {1}");
                     return 1;
                 }
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 continue;
             }
@@ -131,6 +185,7 @@ public class IndexModel : PageModel
             if (!IsAlphabetic(c))
                 nonAlphabeticCount++;
         }
+
         return (double)nonAlphabeticCount / text.Length;
     }
 
@@ -138,8 +193,7 @@ public class IndexModel : PageModel
     {
         // Проверка на русские и латинские буквы
         return char.IsLetter(c) &&
-               (c <= 0x007F ||  // ASCII
+               (c <= 0x007F || // ASCII
                 c >= 0x0410 && c <= 0x044F); // Русские буквы
     }
-
 }

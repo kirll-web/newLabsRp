@@ -28,4 +28,7 @@ start "RankCalculator 1" dotnet run --project RankCalculator
 start "RankCalculator 2" dotnet run --no-build --project RankCalculator
 start "RankCalculator 3" dotnet run --no-build --project RankCalculator
 
+start "EventsLogger 1" dotnet run --project EventsLogger
+start "EventsLogger 2" dotnet run --no-build --project EventsLogger
+
 cd scripts

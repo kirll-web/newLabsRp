@@ -8,6 +8,11 @@ namespace RankCalculator
     public class Consumer
     {
         private const string QueueName = "valuator.processing.rank";
+        private const string QueueEvents = "valuator.events";
+        private const string exchangeName = "events";
+
+        private const string RankCalculatedEvent = "RankCalculated";
+
         private static IDatabase _redisDb;
 
         public static async Task Main(string[] args)
@@ -44,6 +49,7 @@ namespace RankCalculator
 
                 double rank = CalculateRank(id);
                 await _redisDb.StringSetAsync($"RANK-{id}", rank.ToString());
+                await SendRankCalculatedEvent(id, rank);
 
                 Console.WriteLine($"Computed rank: {rank} for id: {id}");
 
@@ -81,6 +87,61 @@ namespace RankCalculator
                     nonAlphabeticCount++;
             }
             return (double)nonAlphabeticCount / text.Length;
+        }
+        
+        private static async Task SendRankCalculatedEvent(string id, double rank)
+        {
+            CancellationTokenSource cts = new CancellationTokenSource();
+            Task produceTask = ProduceRankCalculatedEvent(cts.Token, id, rank);
+
+            await produceTask; 
+            cts.Cancel();
+        }
+
+        private static async Task ProduceRankCalculatedEvent(CancellationToken ct, string id, double rank)
+        {
+            ConnectionFactory factory = new ConnectionFactory
+            {
+                HostName = "localhost"
+            };
+            await using IConnection connection = await factory.CreateConnectionAsync(ct);
+            await using IChannel channel = await connection.CreateChannelAsync(null, ct);
+
+            await DeclareTopologyAsyncForRankCalculated(channel, ct);
+
+            string message = $"{id}|{rank}";
+            byte[] body = Encoding.UTF8.GetBytes(message);
+
+            await channel.BasicPublishAsync(
+                exchange: exchangeName,
+                routingKey: RankCalculatedEvent,
+                mandatory: false,
+                body: body
+            );
+
+            await connection.CloseAsync(ct);
+        }
+        
+        private static async Task DeclareTopologyAsyncForRankCalculated(IChannel channel, CancellationToken ct)
+        {
+            await channel.ExchangeDeclareAsync(
+                exchange: exchangeName,
+                type: ExchangeType.Direct,
+                durable: true, 
+                cancellationToken: ct
+            );
+            await channel.QueueDeclareAsync(
+                queue: QueueEvents,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                cancellationToken: ct
+            );
+            await channel.QueueBindAsync(
+                queue: QueueEvents,
+                exchange: exchangeName,
+                routingKey: RankCalculatedEvent,
+                cancellationToken: ct);
         }
 
         private static bool IsAlphabetic(char c)

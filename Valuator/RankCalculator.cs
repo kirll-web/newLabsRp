@@ -5,7 +5,7 @@ using StackExchange.Redis;
 
 namespace RankCalculator
 {
-    public class Consumer
+    public class RankCalculator
     {
         private const string QueueName = "valuator.processing.rank";
         private static IDatabase _redisDb;
