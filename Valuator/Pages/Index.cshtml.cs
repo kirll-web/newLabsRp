@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Connections;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR.Client;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using StackExchange.Redis;
-using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Valuator.Pages;
 
@@ -18,6 +16,7 @@ public class IndexModel : PageModel
     private const string QueueEvents = "valuator.events";
     private const string SimilirityEvent = "SimilarityCalculated";
     private const string exchangeName = "events";
+    HubConnection connection;
 
     public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis)
     {
@@ -33,7 +32,7 @@ public class IndexModel : PageModel
         _redisDb.StringSet($"SIMILARITY-{id}", similarity.ToString());
         _redisDb.StringSet($"TEXT-{id}", text != null ? text : "");
         await SendSimilirityEvent(id, similarity);
-
+      
         await SendMessageToQueue($"{id}");
 
         return Redirect($"summary?id={id}");
@@ -134,7 +133,7 @@ public class IndexModel : PageModel
         await channel.ExchangeDeclareAsync(
             exchange: exchangeName,
             type: ExchangeType.Direct,
-            durable: true, // Добавьте это!
+            durable: true, 
             cancellationToken: ct
         );
         await channel.QueueDeclareAsync(

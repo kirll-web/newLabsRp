@@ -1,15 +1,19 @@
 ﻿using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
+using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 
 namespace RankCalculator
 {
+
     public class Consumer
     {
         private const string QueueName = "valuator.processing.rank";
         private const string QueueEvents = "valuator.events";
         private const string exchangeName = "events";
+        private const string hubUrl = "http://localhost:5005/processing-hub";
 
         private const string RankCalculatedEvent = "RankCalculated";
 
@@ -42,6 +46,15 @@ namespace RankCalculator
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.ReceivedAsync += async (_, eventArgs) =>
             {
+                var t = Task.Run(async delegate
+                {
+                    TimeSpan interval = TimeSpan.FromSeconds(new Random().Next(3, 5)); //fixme mock
+                    Console.WriteLine($"Waiting {interval}");
+
+                    await Task.Delay(interval);
+                    return 42;
+                }); 
+                t.Wait();
                 Console.WriteLine("Consuming");
                 string id = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
                 Console.WriteLine($"Consuming: {id} from queue {QueueName}");
@@ -49,10 +62,16 @@ namespace RankCalculator
 
                 double rank = CalculateRank(id);
                 await _redisDb.StringSetAsync($"RANK-{id}", rank.ToString());
+               
                 await SendRankCalculatedEvent(id, rank);
 
                 Console.WriteLine($"Computed rank: {rank} for id: {id}");
+                 var hubConnection = new HubConnectionBuilder()
+                     .WithUrl(hubUrl)
+                     .Build();
 
+                await hubConnection.StartAsync();
+                await hubConnection.InvokeAsync("NotifyCompletion", id, $"{rank}");
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
             };
 
@@ -108,7 +127,8 @@ namespace RankCalculator
             await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
             await DeclareTopologyAsyncForRankCalculated(channel, ct);
-
+            
+         
             string message = $"{id}|{rank}";
             byte[] body = Encoding.UTF8.GetBytes(message);
 

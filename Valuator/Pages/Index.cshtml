@@ -5,11 +5,34 @@
 }
 
 <div class="text-center">
+    <input type="button" id="sendBtn" />
     <form method="post">
         <div class="col-2">Текст для оценки:</div>
         <div class="col-10">
             <textarea name="text" rows="5" cols="50"></textarea>
-            <input type="submit" />
+            <input type="submit"/>
         </div>
     </form>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+<script>
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/processing-hub")
+        .build();
+
+    document.getElementById("sendBtn").addEventListener("click", function () {
+        hubConnection.invoke("Send", "Hello world")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    });
+
+    hubConnection.on("Receive", function(message) {
+        console.log(message);
+    });
+
+    hubConnection.start()
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
+</script>
