@@ -50,10 +50,10 @@ namespace RankCalculator
                 double rank = CalculateRank(id);
                 await _redisDb.StringSetAsync($"RANK-{id}", rank.ToString());
                 await SendRankCalculatedEvent(id, rank);
-
                 Console.WriteLine($"Computed rank: {rank} for id: {id}");
 
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
+              
             };
 
             await channel.BasicConsumeAsync(

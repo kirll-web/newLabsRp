@@ -12,8 +12,7 @@ namespace EventsLogger
         private const string SimilarityCalculated = "SimilarityCalculated";
         private const string exchangeName = "events";
 
-
-
+        
         public static async Task Main(string[] args)
         {
             Console.WriteLine("Consumer started");

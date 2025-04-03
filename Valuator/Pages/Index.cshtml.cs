@@ -1,11 +1,8 @@
-using Microsoft.AspNetCore.Connections;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using StackExchange.Redis;
-using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Valuator.Pages;
 
@@ -79,8 +76,8 @@ public class IndexModel : PageModel
     {
         CancellationTokenSource cts = new CancellationTokenSource();
         Task produceTask = ProduceSimilirityEvent(cts.Token, id, similarity);
-        
-        await produceTask; 
+
+        await produceTask;
         cts.Cancel();
     }
 
