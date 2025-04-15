@@ -1,28 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Valuator.Pages;
 public class SummaryModel : PageModel
 {
+    private readonly IDatabase _redisDb;
     private readonly ILogger<SummaryModel> _logger;
 
-    public SummaryModel(ILogger<SummaryModel> logger)
+    public SummaryModel(ILogger<SummaryModel> logger, IConnectionMultiplexer redis)
     {
         _logger = logger;
+        _redisDb = redis.GetDatabase();
     }
 
     public double Rank { get; set; }
     public double Similarity { get; set; }
 
-    public void OnGet(string id)
+    public async Task OnGetAsync(string id)
     {
-        _logger.LogDebug(id);
+        string rankKey = "RANK-" + id;
+        string similarityKey = "SIMILARITY-" + id;
+        _logger.LogInformation($"OnGetAsync: {"RANK-" + id}");
+        string rankValue =  await _redisDb.StringGetAsync(rankKey);
 
-        // TODO: (pa1) проинициализировать свойства Rank и Similarity значениями из БД (Redis)
+        while (rankValue == null)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            rankValue = await _redisDb.StringGetAsync(rankKey);
+        }
+        _logger.LogInformation($"OnGetAsync: {id}, {rankValue}");
+        string similarityValue = _redisDb.StringGet(similarityKey);
+        _logger.LogInformation($"id : {id}SIMILARITY: {similarityValue}");
+        Console.WriteLine($"OnGetAsync: {rankValue}");
+        Rank = double.Parse(rankValue);
+        Similarity = double.Parse(similarityValue);
     }
 }
