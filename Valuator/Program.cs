@@ -1,8 +1,4 @@
-using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
-using System.Runtime.Intrinsics.X86;
-using System.Text;
-using Valuator.Hubs;
 
 namespace Valuator;
 
