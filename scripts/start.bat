@@ -1,7 +1,16 @@
+
+set DB_MAIN=localhost:6000
+set DB_RU=localhost:6001
+set DB_EU=localhost:6002
+set DB_ASIA=localhost:6003
+
 docker-compose up -d
 
 docker start rabbitmq-pa3
-docker start my-redis
+# start docker run -p 6000:6379 redis
+# start docker run -p 6001:6379 redis
+# start docker run -p 6002:6379 redis
+# start docker run -p 6003:6379 redis
 
 timeout /t 5 /nobreak >nul 
 

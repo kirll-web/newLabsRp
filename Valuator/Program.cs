@@ -11,11 +11,24 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+// Конфигурация подключений
+        Console.WriteLine("DB_MAIN" + Environment.GetEnvironmentVariable("DB_MAIN"));
+        Console.WriteLine("DB_EU" +  Environment.GetEnvironmentVariable("DB_EU"));
+        Console.WriteLine("DB_RU" +  Environment.GetEnvironmentVariable("DB_RU"));
+   
 
-        var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
-        var redis = ConnectionMultiplexer.Connect(redisConnectionString);
-        builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
+        builder.Services.AddKeyedSingleton<IConnectionMultiplexer>("MainRedis", 
+            (_, _) => ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("DB_MAIN")));
 
+        builder.Services.AddKeyedSingleton<IConnectionMultiplexer>("RURedis", 
+            (_, _) => ConnectionMultiplexer.Connect( Environment.GetEnvironmentVariable("DB_RU")));
+
+        builder.Services.AddKeyedSingleton<IConnectionMultiplexer>("EURedis", 
+            (_, _) => ConnectionMultiplexer.Connect( Environment.GetEnvironmentVariable("DB_EU")));
+
+        builder.Services.AddKeyedSingleton<IConnectionMultiplexer>("ASIARedis", 
+            (_, _) => ConnectionMultiplexer.Connect( Environment.GetEnvironmentVariable("DB_ASIA")));
+        
 
         // Add services to the container.
         builder.Services.AddRazorPages();

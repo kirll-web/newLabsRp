@@ -1,15 +1,30 @@
 ﻿using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
+using System.Text.Json;
 using StackExchange.Redis;
+
+public class MessageRank
+{
+    public string Id { get; set; }
+    public double  Rank { get; set; }
+    public string Region { get; set; }
+}
+
+public class MessageSimilarity
+{
+    public string Id { get; set; }
+    public double  Similarity { get; set; }
+    public string Region { get; set; }
+}
 
 namespace EventsLogger
 {
     public class Consumer
     {
         private const string QueueEvents = "valuator.events";
-        private const string RankCalculatedEvent = "RankCalculated";
-        private const string SimilarityCalculated = "SimilarityCalculated";
+        private const string RoutingRankCalculated = "RankCalculated";
+        private const string RoutingSimilarityCalculated = "SimilarityCalculated";
         private const string exchangeName = "events";
 
         
@@ -37,18 +52,50 @@ namespace EventsLogger
         {
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.ReceivedAsync += async (_, eventArgs) =>
-            {
-                string[] parts = Encoding.UTF8.GetString(eventArgs.Body.ToArray()).Split(new[] { '|' }, 2) ?? new string[0];
+            { 
+                Console.WriteLine($"DEGUG EVENT");
+                var body = eventArgs.Body.ToArray();
+                var json = Encoding.UTF8.GetString(body);
+                Console.WriteLine($"1 DEGUG EVENT {eventArgs.RoutingKey}");
+                if (eventArgs.RoutingKey == RoutingRankCalculated)
+                {
+                    Console.WriteLine($" 2 DEGUG EVENT {eventArgs.RoutingKey} {json}");
+                    try
+                    {
+                        var message = JsonSerializer.Deserialize<MessageRank>(json);
+                        Console.WriteLine($"Received event: {eventArgs.RoutingKey}, id: {message.Id}, value: {message.Rank}");
+                        Console.WriteLine($"LOOKUP: {message.Id},  {message.Region}*");
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                    }
+                   
+                } else if (eventArgs.RoutingKey == RoutingSimilarityCalculated)
+                {
+                    Console.WriteLine($" 2 DEGUG EVENT {eventArgs.RoutingKey} {JsonSerializer.Deserialize<MessageSimilarity>(json)}");
+                    try
+                    {
+                        var message = JsonSerializer.Deserialize<MessageSimilarity>(json);
+                        Console.WriteLine($"Received event: {eventArgs.RoutingKey}, id: {message.Id}, value: {message.Similarity}");
+                        Console.WriteLine($"LOOKUP: {message.Id},  {message.Region}*");
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Unknown routing key");
+                }
                 
-                string id = parts[0];
-                string value = parts[1];
-                Console.WriteLine($"Received event: {eventArgs.RoutingKey}, id: {id}, value: {value}");
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
             };
 
             await channel.BasicConsumeAsync(
                 queue: QueueEvents,
-                autoAck: false, 
+                autoAck: true, 
                 consumer: consumer
             );
         }
@@ -76,12 +123,12 @@ namespace EventsLogger
             await channel.QueueBindAsync(
                 queue: QueueEvents,
                 exchange: exchangeName,
-                routingKey: RankCalculatedEvent
+                routingKey: RoutingRankCalculated
             );
 
             await channel.QueueBindAsync(
                 queue: QueueEvents,
-                routingKey: SimilarityCalculated,
+                routingKey: RoutingSimilarityCalculated,
                 exchange: exchangeName
             );
         }

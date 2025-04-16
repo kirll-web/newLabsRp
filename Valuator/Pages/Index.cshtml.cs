@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RabbitMQ.Client;
@@ -9,46 +10,63 @@ namespace Valuator.Pages;
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
-    private readonly IDatabase _redisDb;
+    private readonly IDatabase _mainDb;
+    private readonly IDatabase _ruDb;
+    private readonly IDatabase _euDb;
+    private readonly IDatabase _asiaDb;
+
     private readonly ConnectionFactory _factory;
     private const string QueueName = "valuator.processing.rank";
     private const string QueueEvents = "valuator.events";
     private const string SimilirityEvent = "SimilarityCalculated";
     private const string exchangeName = "events";
 
-    public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis)
+    public IndexModel(ILogger<IndexModel> logger, [FromKeyedServices("MainRedis")] IConnectionMultiplexer mainRedis,
+        [FromKeyedServices("RURedis")] IConnectionMultiplexer ruRedis,
+        [FromKeyedServices("EURedis")] IConnectionMultiplexer euRedis,
+        [FromKeyedServices("ASIARedis")] IConnectionMultiplexer asiaRedis)
     {
         _logger = logger;
-        _redisDb = redis.GetDatabase();
-        _factory = new ConnectionFactory { HostName = "localhost" };
+
+
+        _mainDb = mainRedis.GetDatabase();
+        _ruDb = ruRedis.GetDatabase();
+        _euDb = euRedis.GetDatabase();
+        _asiaDb = asiaRedis.GetDatabase();
     }
 
-    public async Task<IActionResult> OnPostAsync(string text)
-    {
-        string id = Guid.NewGuid().ToString();
-        double similarity = CalculateSimilarityAsync(text);
-        _redisDb.StringSet($"SIMILARITY-{id}", similarity.ToString());
-        _redisDb.StringSet($"TEXT-{id}", text != null ? text : "");
-        await SendSimilirityEvent(id, similarity);
 
-        await SendMessageToQueue($"{id}");
+    public async Task<IActionResult> OnPostAsync(string text, string region)
+    {
+        Console.WriteLine(region);
+        string id = Guid.NewGuid().ToString();
+        double similarity = CalculateSimilarityAsync(text, region);
+
+        await _mainDb.StringSetAsync($"TEXT-{id}", region);
+
+        getDb(region).StringSet($"SIMILARITY-{id}", similarity.ToString());
+        getDb(region).StringSet($"TEXT-{id}", text != null ? text : "");
+        await SendSimilirityEvent(id, region, similarity);
+        _logger.LogInformation($"Calculate {id} region: {region}");
+
+
+        await SendMessageToQueue($"{id}", region);
 
         return Redirect($"summary?id={id}");
     }
 
-    private async Task SendMessageToQueue(string id)
+    private async Task SendMessageToQueue(string id, string region)
     {
         CancellationTokenSource cts = new CancellationTokenSource();
-        Task produceTask = ProduceAsync(cts.Token, id);
+        Task produceTask = ProduceAsync(cts.Token, id, region);
 
-        await produceTask; // Дожидаемся завершения ProduceAsync
+        await produceTask;
         cts.Cancel();
     }
 
 
-    private async Task ProduceAsync(CancellationToken ct, string id)
+    private async Task ProduceAsync(CancellationToken ct, string id, string region)
     {
-        // Установка соединения с RabbitMQ по адресу localhost:5672
         ConnectionFactory factory = new ConnectionFactory
         {
             HostName = "localhost"
@@ -58,9 +76,14 @@ public class IndexModel : PageModel
 
         await DeclareTopologyAsync(channel, ct);
 
-        // Отправка сообщения ежесекундно в цикле.
-        string message = $"{id}";
-        byte[] body = Encoding.UTF8.GetBytes(message);
+        var messageObject = new
+        {
+            Id = id,
+            Region = region
+        };
+
+        var json = JsonSerializer.Serialize(messageObject);
+        var body = Encoding.UTF8.GetBytes(json);
 
         await channel.BasicPublishAsync(
             exchange: "",
@@ -72,16 +95,32 @@ public class IndexModel : PageModel
         await connection.CloseAsync(ct);
     }
 
-    private async Task SendSimilirityEvent(string id, double similarity)
+    private async Task SendSimilirityEvent(string id, string region, double similarity)
     {
         CancellationTokenSource cts = new CancellationTokenSource();
-        Task produceTask = ProduceSimilirityEvent(cts.Token, id, similarity);
+        Task produceTask = ProduceSimilirityEvent(cts.Token, id, region, similarity);
 
         await produceTask;
         cts.Cancel();
     }
 
-    private async Task ProduceSimilirityEvent(CancellationToken ct, string id, double similarity)
+    private IDatabase getDb(string region)
+    {
+        if (region == "RU")
+        {
+            return _ruDb;
+        }
+        else if (region == "EU")
+        {
+            return _euDb;
+        }
+        else
+        {
+            return _asiaDb;
+        }
+    }
+
+    private async Task ProduceSimilirityEvent(CancellationToken ct, string id, string region, double similarity)
     {
         ConnectionFactory factory = new ConnectionFactory
         {
@@ -92,8 +131,22 @@ public class IndexModel : PageModel
 
         await DeclareTopologyAsyncForSimilirityEvents(channel, ct);
 
-        string message = $"{id}|{similarity}";
-        byte[] body = Encoding.UTF8.GetBytes(message);
+        var messageObject = new
+        {
+            Id = id,
+            Similarity = similarity,
+            Region = region
+        };
+
+        var json = JsonSerializer.Serialize(messageObject);
+        var body = Encoding.UTF8.GetBytes(json);
+
+        await channel.BasicPublishAsync(
+            exchange: "",
+            routingKey: QueueName,
+            mandatory: false,
+            body: body
+        );
 
         await channel.BasicPublishAsync(
             exchange: exchangeName,
@@ -101,7 +154,6 @@ public class IndexModel : PageModel
             mandatory: false,
             body: body
         );
-
         await connection.CloseAsync(ct);
     }
 
@@ -131,7 +183,7 @@ public class IndexModel : PageModel
         await channel.ExchangeDeclareAsync(
             exchange: exchangeName,
             type: ExchangeType.Direct,
-            durable: true, // Добавьте это!
+            durable: true,
             cancellationToken: ct
         );
         await channel.QueueDeclareAsync(
@@ -148,15 +200,16 @@ public class IndexModel : PageModel
             cancellationToken: ct);
     }
 
-    private double CalculateSimilarityAsync(string currentText)
+    private double CalculateSimilarityAsync(string currentText, string region)
     {
-        var keys = _redisDb.Multiplexer.GetServer(_redisDb.Multiplexer.GetEndPoints().First()).Keys(pattern: "TEXT-*");
+        var keys = getDb(region).Multiplexer.GetServer(getDb(region).Multiplexer.GetEndPoints().First())
+            .Keys(pattern: "TEXT-*");
 
         foreach (var key in keys)
         {
             try
             {
-                var storedText = _redisDb.StringGet(key);
+                var storedText = getDb(region).StringGet(key);
                 if (storedText == currentText)
                 {
                     _logger.LogInformation($"2 id: {storedText} text: {currentText} SIMILARITY: {1}");
@@ -188,9 +241,8 @@ public class IndexModel : PageModel
 
     private bool IsAlphabetic(char c)
     {
-        // Проверка на русские и латинские буквы
         return char.IsLetter(c) &&
-               (c <= 0x007F || // ASCII
-                c >= 0x0410 && c <= 0x044F); // Русские буквы
+               (c <= 0x007F ||
+                c >= 0x0410 && c <= 0x044F);
     }
 }

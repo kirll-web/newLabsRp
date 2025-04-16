@@ -1,7 +1,14 @@
 ﻿using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
+using System.Text.Json;
 using StackExchange.Redis;
+
+public class MessageDto
+{
+    public string Id { get; set; }
+}
+
 
 namespace RankCalculator
 {
@@ -12,8 +19,8 @@ namespace RankCalculator
         private const string exchangeName = "events";
 
         private const string RankCalculatedEvent = "RankCalculated";
-
-        private static IDatabase _redisDb;
+        private static IDatabase _redisMainDb;
+        private static Dictionary<string, IDatabase> _regionalDbs; 
 
         public static async Task Main(string[] args)
         {
@@ -24,8 +31,20 @@ namespace RankCalculator
                 HostName = "localhost"
             };
 
-            var redis = await ConnectionMultiplexer.ConnectAsync("localhost");
-            _redisDb = redis.GetDatabase();
+            
+            var mainConnection = ConnectionMultiplexer.Connect(
+                Environment.GetEnvironmentVariable("DB_MAIN"));
+            _redisMainDb = mainConnection.GetDatabase();
+        
+            _regionalDbs = new Dictionary<string, IDatabase>
+            {
+                ["RU"] = ConnectionMultiplexer.Connect(
+                    Environment.GetEnvironmentVariable("DB_RU")).GetDatabase(),
+                ["EU"] = ConnectionMultiplexer.Connect(
+                    Environment.GetEnvironmentVariable("DB_EU")).GetDatabase(),
+                ["ASIA"] = ConnectionMultiplexer.Connect(
+                    Environment.GetEnvironmentVariable("DB_ASIA")).GetDatabase()
+            };
 
             var connection = await factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
@@ -42,15 +61,17 @@ namespace RankCalculator
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.ReceivedAsync += async (_, eventArgs) =>
             {
-                Console.WriteLine("Consuming");
-                string id = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-                Console.WriteLine($"Consuming: {id} from queue {QueueName}");
-
-
-                double rank = CalculateRank(id);
-                await _redisDb.StringSetAsync($"RANK-{id}", rank.ToString());
-                await SendRankCalculatedEvent(id, rank);
-                Console.WriteLine($"Computed rank: {rank} for id: {id}");
+                var body = eventArgs.Body.ToArray();
+                var json = Encoding.UTF8.GetString(body);
+    
+                // Десериализация JSON
+                var message = JsonSerializer.Deserialize<MessageDto>(json);
+                string region = _redisMainDb.StringGet($"TEXT-{message.Id}");
+                Console.WriteLine($"CalculateRankAsync {region} text: {message.Id}");
+                double rank = CalculateRank(message.Id, region);
+                await _regionalDbs[region].StringSetAsync($"RANK-{message.Id}", rank.ToString());
+                await SendRankCalculatedEvent(message.Id, rank, region);
+                Console.WriteLine($"Computed rank: {rank} for id: {message.Id}");
 
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
               
@@ -73,10 +94,12 @@ namespace RankCalculator
             );
         }
 
-        private static double CalculateRank(string id)
+        private static double CalculateRank(string id, string region)
         {
-            Console.WriteLine($"CalculateRank id {id}");
-            string text = _redisDb.StringGet($"TEXT-{id}");
+            Console.WriteLine($"CalculateRank id {id} region {region}" );
+            
+            
+            string text = _regionalDbs[region].StringGet($"TEXT-{id}");
             Console.WriteLine($"CalculateRank text {text}");
             if (string.IsNullOrEmpty(text)) return 0;
 
@@ -89,16 +112,16 @@ namespace RankCalculator
             return (double)nonAlphabeticCount / text.Length;
         }
         
-        private static async Task SendRankCalculatedEvent(string id, double rank)
+        private static async Task SendRankCalculatedEvent(string id, double rank, string region)
         {
             CancellationTokenSource cts = new CancellationTokenSource();
-            Task produceTask = ProduceRankCalculatedEvent(cts.Token, id, rank);
+            Task produceTask = ProduceRankCalculatedEvent(cts.Token, id, rank, region);
 
             await produceTask; 
             cts.Cancel();
         }
 
-        private static async Task ProduceRankCalculatedEvent(CancellationToken ct, string id, double rank)
+        private static async Task ProduceRankCalculatedEvent(CancellationToken ct, string id, double rank, string region)
         {
             ConnectionFactory factory = new ConnectionFactory
             {
@@ -108,9 +131,16 @@ namespace RankCalculator
             await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
             await DeclareTopologyAsyncForRankCalculated(channel, ct);
+            
+            var messageObject = new 
+            {
+                Id = id,
+                Rank = rank,
+                Region = region
+            };
 
-            string message = $"{id}|{rank}";
-            byte[] body = Encoding.UTF8.GetBytes(message);
+            var json = JsonSerializer.Serialize(messageObject);
+            var body = Encoding.UTF8.GetBytes(json);
 
             await channel.BasicPublishAsync(
                 exchange: exchangeName,

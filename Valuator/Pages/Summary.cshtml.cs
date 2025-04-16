@@ -13,13 +13,24 @@ using static System.Net.Mime.MediaTypeNames;
 namespace Valuator.Pages;
 public class SummaryModel : PageModel
 {
-    private readonly IDatabase _redisDb;
     private readonly ILogger<SummaryModel> _logger;
+    private readonly IDatabase _mainDb;
+    private readonly IDatabase _ruDb;
+    private readonly IDatabase _euDb;
+    private readonly IDatabase _asiaDb;
 
-    public SummaryModel(ILogger<SummaryModel> logger, IConnectionMultiplexer redis)
+
+    public SummaryModel(ILogger<SummaryModel> logger,       [FromKeyedServices("MainRedis")] IConnectionMultiplexer mainRedis,
+        [FromKeyedServices("RURedis")] IConnectionMultiplexer ruRedis,
+        [FromKeyedServices("EURedis")] IConnectionMultiplexer euRedis,
+        [FromKeyedServices("ASIARedis")] IConnectionMultiplexer asiaRedis)
     {
         _logger = logger;
-        _redisDb = redis.GetDatabase();
+       
+        _mainDb = mainRedis.GetDatabase();
+        _ruDb = ruRedis.GetDatabase();
+        _euDb = euRedis.GetDatabase();
+        _asiaDb = asiaRedis.GetDatabase();
     }
 
     public double Rank { get; set; }
@@ -27,21 +38,33 @@ public class SummaryModel : PageModel
 
     public async Task OnGetAsync(string id)
     {
+        string region = _mainDb.StringGet($"TEXT-{id}");
         string rankKey = "RANK-" + id;
         string similarityKey = "SIMILARITY-" + id;
-        _logger.LogInformation($"OnGetAsync: {"RANK-" + id}");
-        string rankValue =  await _redisDb.StringGetAsync(rankKey);
+        string rankValue =  await getDb(region).StringGetAsync(rankKey);
 
         while (rankValue == null)
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
-            rankValue = await _redisDb.StringGetAsync(rankKey);
+            rankValue = await  getDb(region).StringGetAsync(rankKey);
         }
-        _logger.LogInformation($"OnGetAsync: {id}, {rankValue}");
-        string similarityValue = _redisDb.StringGet(similarityKey);
-        _logger.LogInformation($"id : {id}SIMILARITY: {similarityValue}");
-        Console.WriteLine($"OnGetAsync: {rankValue}");
+        string similarityValue = getDb(region).StringGet(similarityKey);
+        _logger.LogInformation($"id : {id} | Rank: {rankValue} | Similarity: {similarityValue}");
         Rank = double.Parse(rankValue);
         Similarity = double.Parse(similarityValue);
+    }
+    
+    private IDatabase getDb(string region)
+    {
+        if (region == "RU")
+        {
+            return _ruDb;
+        } else if (region == "EU")
+        {
+            return _euDb;
+        } else
+        {
+            return _asiaDb;
+        } 
     }
 }
