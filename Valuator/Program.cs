@@ -11,12 +11,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-// Конфигурация подключений
-        Console.WriteLine("DB_MAIN" + Environment.GetEnvironmentVariable("DB_MAIN"));
-        Console.WriteLine("DB_EU" +  Environment.GetEnvironmentVariable("DB_EU"));
-        Console.WriteLine("DB_RU" +  Environment.GetEnvironmentVariable("DB_RU"));
-   
-
         builder.Services.AddKeyedSingleton<IConnectionMultiplexer>("MainRedis", 
             (_, _) => ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("DB_MAIN")));
 

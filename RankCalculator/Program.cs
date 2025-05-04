@@ -64,15 +64,12 @@ namespace RankCalculator
                 var body = eventArgs.Body.ToArray();
                 var json = Encoding.UTF8.GetString(body);
     
-                // Десериализация JSON
                 var message = JsonSerializer.Deserialize<MessageDto>(json);
-                string region = _redisMainDb.StringGet($"TEXT-{message.Id}");
-                Console.WriteLine($"CalculateRankAsync {region} text: {message.Id}");
+                string region = _redisMainDb.StringGet($"{message.Id}");
                 double rank = CalculateRank(message.Id, region);
                 await _regionalDbs[region].StringSetAsync($"RANK-{message.Id}", rank.ToString());
                 await SendRankCalculatedEvent(message.Id, rank, region);
-                Console.WriteLine($"Computed rank: {rank} for id: {message.Id}");
-
+                Console.WriteLine($"LOOKUP: {message.Id},  {region}*");
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
               
             };
@@ -96,11 +93,7 @@ namespace RankCalculator
 
         private static double CalculateRank(string id, string region)
         {
-            Console.WriteLine($"CalculateRank id {id} region {region}" );
-            
-            
             string text = _regionalDbs[region].StringGet($"TEXT-{id}");
-            Console.WriteLine($"CalculateRank text {text}");
             if (string.IsNullOrEmpty(text)) return 0;
 
             int nonAlphabeticCount = 0;

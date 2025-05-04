@@ -905,3 +905,31 @@
 2025/04/16 23:28:24 [notice] 32896#27312: using inherited sockets from "X:\nginx"
 2025/04/16 23:28:24 [emerg] 32896#27312: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
 2025/04/16 23:28:24 [emerg] 32896#27312: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:08:20 [notice] 29092#8056: using inherited sockets from "X:\nginx"
+2025/04/17 08:08:20 [emerg] 29092#8056: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:08:20 [emerg] 29092#8056: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:08:20 [notice] 23072#16504: using inherited sockets from "X:\nginx"
+2025/04/17 08:08:20 [emerg] 23072#16504: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:08:20 [emerg] 23072#16504: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:08:44 [error] 23072#23544: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "http://[::1]:5001/", host: "localhost:8080"
+2025/04/17 08:08:46 [error] 23072#23544: *1 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /lib/bootstrap/dist/css/bootstrap.min.css HTTP/1.1", upstream: "http://[::1]:5002/lib/bootstrap/dist/css/bootstrap.min.css", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/04/17 08:08:46 [error] 23072#23544: *3 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /Valuator.styles.css?v=oX0i0ioYG3SwKG24OTlK9jvPA2-I23bJOUrpKcL9h1E HTTP/1.1", upstream: "http://[::1]:5003/Valuator.styles.css?v=oX0i0ioYG3SwKG24OTlK9jvPA2-I23bJOUrpKcL9h1E", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/04/17 08:08:46 [error] 23072#23544: *9 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /lib/bootstrap/dist/js/bootstrap.bundle.min.js HTTP/1.1", upstream: "http://[::1]:5004/lib/bootstrap/dist/js/bootstrap.bundle.min.js", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/04/17 08:24:29 [notice] 37132#36116: using inherited sockets from "X:\nginx"
+2025/04/17 08:24:29 [emerg] 37132#36116: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:24:29 [emerg] 37132#36116: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:24:29 [notice] 30988#12436: using inherited sockets from "X:\nginx"
+2025/04/17 08:24:29 [emerg] 30988#12436: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:24:29 [emerg] 30988#12436: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:25:15 [notice] 34804#19448: using inherited sockets from "X:\nginx"
+2025/04/17 08:25:15 [emerg] 34804#19448: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:25:15 [emerg] 34804#19448: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:25:15 [notice] 28912#14176: using inherited sockets from "X:\nginx"
+2025/04/17 08:25:15 [emerg] 28912#14176: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:25:15 [emerg] 28912#14176: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:27:54 [notice] 38176#2392: using inherited sockets from "X:\nginx"
+2025/04/17 08:27:54 [emerg] 38176#2392: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:27:54 [emerg] 38176#2392: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/04/17 08:27:54 [notice] 22292#30220: using inherited sockets from "X:\nginx"
+2025/04/17 08:27:54 [emerg] 22292#30220: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/04/17 08:27:54 [emerg] 22292#30220: invalid socket number "X:\nginx" in NGINX environment variable, ignoring

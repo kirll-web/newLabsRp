@@ -38,18 +38,19 @@ public class SummaryModel : PageModel
 
     public async Task OnGetAsync(string id)
     {
-        string region = _mainDb.StringGet($"TEXT-{id}");
+        string region = _mainDb.StringGet($"{id}");
         string rankKey = "RANK-" + id;
         string similarityKey = "SIMILARITY-" + id;
         string rankValue =  await getDb(region).StringGetAsync(rankKey);
-
+        Console.WriteLine($"LOOKUP: {id},  {region}*");
+        
         while (rankValue == null)
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
             rankValue = await  getDb(region).StringGetAsync(rankKey);
         }
+        
         string similarityValue = getDb(region).StringGet(similarityKey);
-        _logger.LogInformation($"id : {id} | Rank: {rankValue} | Similarity: {similarityValue}");
         Rank = double.Parse(rankValue);
         Similarity = double.Parse(similarityValue);
     }

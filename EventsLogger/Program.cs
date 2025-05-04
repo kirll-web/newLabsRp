@@ -8,14 +8,12 @@ public class MessageRank
 {
     public string Id { get; set; }
     public double  Rank { get; set; }
-    public string Region { get; set; }
 }
 
 public class MessageSimilarity
 {
     public string Id { get; set; }
     public double  Similarity { get; set; }
-    public string Region { get; set; }
 }
 
 namespace EventsLogger
@@ -59,12 +57,10 @@ namespace EventsLogger
                 Console.WriteLine($"1 DEGUG EVENT {eventArgs.RoutingKey}");
                 if (eventArgs.RoutingKey == RoutingRankCalculated)
                 {
-                    Console.WriteLine($" 2 DEGUG EVENT {eventArgs.RoutingKey} {json}");
                     try
                     {
                         var message = JsonSerializer.Deserialize<MessageRank>(json);
                         Console.WriteLine($"Received event: {eventArgs.RoutingKey}, id: {message.Id}, value: {message.Rank}");
-                        Console.WriteLine($"LOOKUP: {message.Id},  {message.Region}*");
                     }
                     catch (Exception exception)
                     {
@@ -73,12 +69,10 @@ namespace EventsLogger
                    
                 } else if (eventArgs.RoutingKey == RoutingSimilarityCalculated)
                 {
-                    Console.WriteLine($" 2 DEGUG EVENT {eventArgs.RoutingKey} {JsonSerializer.Deserialize<MessageSimilarity>(json)}");
                     try
                     {
                         var message = JsonSerializer.Deserialize<MessageSimilarity>(json);
                         Console.WriteLine($"Received event: {eventArgs.RoutingKey}, id: {message.Id}, value: {message.Similarity}");
-                        Console.WriteLine($"LOOKUP: {message.Id},  {message.Region}*");
                     }
                     catch (Exception exception)
                     {

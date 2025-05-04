@@ -38,18 +38,16 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(string text, string region)
     {
-        Console.WriteLine(region);
         string id = Guid.NewGuid().ToString();
         double similarity = CalculateSimilarityAsync(text, region);
 
-        await _mainDb.StringSetAsync($"TEXT-{id}", region);
+        await _mainDb.StringSetAsync($"{id}", region);
 
         getDb(region).StringSet($"SIMILARITY-{id}", similarity.ToString());
         getDb(region).StringSet($"TEXT-{id}", text != null ? text : "");
         await SendSimilirityEvent(id, region, similarity);
-        _logger.LogInformation($"Calculate {id} region: {region}");
-
-
+        _logger.LogInformation($"LOOKUP: {id},  {region}*");
+        
         await SendMessageToQueue($"{id}", region);
 
         return Redirect($"summary?id={id}");
@@ -78,8 +76,7 @@ public class IndexModel : PageModel
 
         var messageObject = new
         {
-            Id = id,
-            Region = region
+            Id = id
         };
 
         var json = JsonSerializer.Serialize(messageObject);
@@ -212,7 +209,6 @@ public class IndexModel : PageModel
                 var storedText = getDb(region).StringGet(key);
                 if (storedText == currentText)
                 {
-                    _logger.LogInformation($"2 id: {storedText} text: {currentText} SIMILARITY: {1}");
                     return 1;
                 }
             }
