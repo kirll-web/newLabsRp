@@ -12,6 +12,7 @@ public class ProcessingHub : Hub
 
     public async Task NotifyCompletion(string id, string message)
     {
+        Console.WriteLine($"NotifyCompletion to calculation: {id}");
         await Clients.Group(id).SendAsync("Receive", message);
     }
 }
@@ -22,14 +23,14 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        Console.WriteLine($"Main");
         builder.Services.AddSignalR();
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("SignalRCors", policy =>
             {
                 policy.SetIsOriginAllowed(origin => 
-                        new Uri(origin).Host == "localhost") // Разрешить все localhost-порты
+                        true) // Разрешить все localhost-порты
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();

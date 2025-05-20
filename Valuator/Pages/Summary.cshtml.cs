@@ -17,9 +17,12 @@ public class SummaryModel : PageModel
     public string Rank { get; set; }
     public double Similarity { get; set; }
     public string Id { get; set; }
-
+    
+    public string HubUrl = "http://localhost:5005/processing-hub";
+    
     public async Task OnGetAsync(string id)
     {
+        Console.WriteLine($"HubUrl: {HubUrl}");
         Id = id;
         string rankKey = "RANK-" + id;
         string similarityKey = "SIMILARITY-" + id;

@@ -977,3 +977,9 @@
 2025/04/03 09:44:52 [notice] 19524#31116: using inherited sockets from "X:\nginx"
 2025/04/03 09:44:52 [emerg] 19524#31116: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
 2025/04/03 09:44:52 [emerg] 19524#31116: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/05/11 21:20:24 [notice] 2992#18892: using inherited sockets from "X:\nginx"
+2025/05/11 21:20:24 [emerg] 2992#18892: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/05/11 21:20:24 [emerg] 2992#18892: invalid socket number "X:\nginx" in NGINX environment variable, ignoring
+2025/05/11 21:20:24 [notice] 49456#59536: using inherited sockets from "X:\nginx"
+2025/05/11 21:20:24 [emerg] 49456#59536: invalid socket number "X:\nginx" in NGINX environment variable, ignoring the rest of the variable
+2025/05/11 21:20:24 [emerg] 49456#59536: invalid socket number "X:\nginx" in NGINX environment variable, ignoring

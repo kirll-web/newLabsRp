@@ -22,7 +22,17 @@ public class IndexModel : PageModel
     {
         _logger = logger;
         _redisDb = redis.GetDatabase();
-        _factory = new ConnectionFactory { HostName = "localhost" };
+        var rabbitMqUrl = Environment.GetEnvironmentVariable("RabbitMQ__Url") ?? "localhost";
+        Console.WriteLine($" rabbitMqUrl {rabbitMqUrl}");
+        _factory = rabbitMqUrl == "localhost" ? new ConnectionFactory {
+            HostName = rabbitMqUrl
+        } : new ConnectionFactory{
+            HostName = rabbitMqUrl.Split(':')[0],
+            Port = int.Parse(rabbitMqUrl.Split(':').Length > 1 ? rabbitMqUrl.Split(':')[1] : "5672"),
+            UserName = "guest",
+            Password = "guest"
+        };
+
     }
 
     public async Task<IActionResult> OnPostAsync(string text)
@@ -50,12 +60,8 @@ public class IndexModel : PageModel
 
     private async Task ProduceAsync(CancellationToken ct, string id)
     {
-        // Установка соединения с RabbitMQ по адресу localhost:5672
-        ConnectionFactory factory = new ConnectionFactory
-        {
-            HostName = "localhost"
-        };
-        await using IConnection connection = await factory.CreateConnectionAsync(ct);
+        
+        await using IConnection connection = await _factory.CreateConnectionAsync(ct);
         await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
         await DeclareTopologyAsync(channel, ct);
@@ -85,11 +91,7 @@ public class IndexModel : PageModel
 
     private async Task ProduceSimilirityEvent(CancellationToken ct, string id, double similarity)
     {
-        ConnectionFactory factory = new ConnectionFactory
-        {
-            HostName = "localhost"
-        };
-        await using IConnection connection = await factory.CreateConnectionAsync(ct);
+        await using IConnection connection = await _factory.CreateConnectionAsync(ct);
         await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
         await DeclareTopologyAsyncForSimilirityEvents(channel, ct);

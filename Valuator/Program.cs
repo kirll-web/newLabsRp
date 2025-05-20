@@ -7,10 +7,11 @@ public class Program
  
     public static void Main(string[] args)
     {
+        Console.WriteLine("Main Valuator started");
         var builder = WebApplication.CreateBuilder(args);
         
-
         var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+        Console.WriteLine("redisConnectionString " + builder.Configuration.GetConnectionString("Redis"));
         var redis = ConnectionMultiplexer.Connect(redisConnectionString);
         builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
@@ -34,8 +35,6 @@ public class Program
 
         app.MapRazorPages();
 
-        app.Run();
- 
         app.Run();
     }
 }

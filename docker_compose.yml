@@ -1,0 +1,70 @@
+﻿version: '3.8'
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:7.2
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 20s
+      timeout: 20s
+      retries: 10
+      start_period: 20s
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  hub:
+    image: hub:latest
+    ports:
+      - "5005:5005"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=5005
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Redis=redis:6379
+    depends_on:
+      - redis
+      - rabbitmq
+
+  rank-calculator:
+    image: rank-calculator:latest
+    ports:
+      - "5002:5002"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=5002
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQ__Url=rabbitmq:5672
+      - ConnectionStrings__Redis=redis:6379
+      - ConnectionStrings__Hub=http://hub:5005
+    depends_on:
+      rabbitmq:
+          condition: service_healthy
+      redis:
+        condition: service_started
+      hub:
+        condition: service_started
+
+  valuator:
+    image: valuator:latest
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=5001
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQ__Url=rabbitmq:5672
+      - ConnectionStrings__Redis=redis:6379
+      - ConnectionStrings__Hub=hub:5005
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      hub:
+        condition: service_started

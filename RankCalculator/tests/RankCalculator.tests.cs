@@ -14,7 +14,8 @@ public class RankCalculatorTests
     {
         _redisMock = new Mock<IDatabase>();
         var db = _redisMock.Object;
-        _rankCalculator = new RankCalculator(db);
+        _rankCalculator = new RankCalculator();
+        _rankCalculator.Start(db);
     }
 
     [Fact]
