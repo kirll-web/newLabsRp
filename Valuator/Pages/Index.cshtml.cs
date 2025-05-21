@@ -14,23 +14,45 @@ public class IndexModel : PageModel
     private readonly ConnectionFactory _factory;
     private const string QueueName = "valuator.processing.rank";
     private const string QueueEvents = "valuator.events";
+    private readonly IConfiguration _configuration;
     private const string SimilirityEvent = "SimilarityCalculated";
     private const string exchangeName = "events";
     HubConnection connection;
 
-    public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis)
+    public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis, IConfiguration configuration)
     {
         _logger = logger;
         _redisDb = redis.GetDatabase();
-        _factory = new ConnectionFactory { HostName = "localhost" };
+        _configuration = configuration;
+        _factory = new ConnectionFactory
+        {
+            HostName = _configuration["RabbitMQ:HostName"],
+            UserName = _configuration["RabbitMQ:UserName"],
+            Password = _configuration["RabbitMQ:Password"]
+        };
+        
     }
+    
+    public IActionResult OnGet()
+    {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToPage("/Registration");
+        }
+
+        return Page();
+    }
+
 
     public async Task<IActionResult> OnPostAsync(string text)
     {
         string id = Guid.NewGuid().ToString();
         double similarity = CalculateSimilarityAsync(text);
+        string? username = User.Identity?.Name;
+
         _redisDb.StringSet($"SIMILARITY-{id}", similarity.ToString());
         _redisDb.StringSet($"TEXT-{id}", text != null ? text : "");
+        _redisDb.StringSet($"AUTHOR-{id}", username);  
         await SendSimilirityEvent(id, similarity);
       
         await SendMessageToQueue($"{id}");
@@ -51,11 +73,8 @@ public class IndexModel : PageModel
     private async Task ProduceAsync(CancellationToken ct, string id)
     {
         // Установка соединения с RabbitMQ по адресу localhost:5672
-        ConnectionFactory factory = new ConnectionFactory
-        {
-            HostName = "localhost"
-        };
-        await using IConnection connection = await factory.CreateConnectionAsync(ct);
+
+        await using IConnection connection = await _factory.CreateConnectionAsync(ct);
         await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
         await DeclareTopologyAsync(channel, ct);
@@ -85,11 +104,7 @@ public class IndexModel : PageModel
 
     private async Task ProduceSimilirityEvent(CancellationToken ct, string id, double similarity)
     {
-        ConnectionFactory factory = new ConnectionFactory
-        {
-            HostName = "localhost"
-        };
-        await using IConnection connection = await factory.CreateConnectionAsync(ct);
+        await using IConnection connection = await _factory.CreateConnectionAsync(ct);
         await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
         await DeclareTopologyAsyncForSimilirityEvents(channel, ct);

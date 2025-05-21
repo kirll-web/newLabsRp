@@ -2,36 +2,44 @@
 using RabbitMQ.Client;
 using System.Text;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
-
 namespace RankCalculator
 {
-
     public class Consumer
     {
         private const string QueueName = "valuator.processing.rank";
         private const string QueueEvents = "valuator.events";
         private const string exchangeName = "events";
         private const string hubUrl = "http://localhost:5005/processing-hub";
-
+        private static ConnectionFactory _factory;
         private const string RankCalculatedEvent = "RankCalculated";
 
         private static IDatabase _redisDb;
 
         public static async Task Main(string[] args)
         {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // Путь к расположению appsettings.json
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Добавление файла
+                .Build();
+
             Console.WriteLine("Consumer started");
+            var rabbitMqSettings = configuration.GetSection("RabbitMQ");
+            string connectionString =  configuration.GetSection("ConnectionStrings")["Redis"];
 
-            var factory = new ConnectionFactory
+            _factory = new ConnectionFactory
             {
-                HostName = "localhost"
+                HostName = rabbitMqSettings["HostName"],
+                UserName = rabbitMqSettings["UserName"],
+                Password = rabbitMqSettings["Password"]
             };
+         
 
-            var redis = await ConnectionMultiplexer.ConnectAsync("localhost");
+            var redis = await ConnectionMultiplexer.ConnectAsync(connectionString);
             _redisDb = redis.GetDatabase();
 
-            var connection = await factory.CreateConnectionAsync();
+            var connection = await _factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
 
             await DeclareTopologyAsync(channel);
@@ -71,6 +79,7 @@ namespace RankCalculator
                      .Build();
 
                 await hubConnection.StartAsync();
+                Console.WriteLine($"Отправляю в хаб: {rank} for id: {id}");
                 await hubConnection.InvokeAsync("NotifyCompletion", id, $"{rank}");
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
             };
@@ -119,11 +128,8 @@ namespace RankCalculator
 
         private static async Task ProduceRankCalculatedEvent(CancellationToken ct, string id, double rank)
         {
-            ConnectionFactory factory = new ConnectionFactory
-            {
-                HostName = "localhost"
-            };
-            await using IConnection connection = await factory.CreateConnectionAsync(ct);
+
+            await using IConnection connection = await _factory.CreateConnectionAsync(ct);
             await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
             await DeclareTopologyAsyncForRankCalculated(channel, ct);

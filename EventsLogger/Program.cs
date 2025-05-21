@@ -1,6 +1,7 @@
 ﻿using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
 namespace EventsLogger
@@ -11,20 +12,28 @@ namespace EventsLogger
         private const string RankCalculatedEvent = "RankCalculated";
         private const string SimilarityCalculated = "SimilarityCalculated";
         private const string exchangeName = "events";
-
+        private static ConnectionFactory _factory;
 
 
         public static async Task Main(string[] args)
         {
-            Console.WriteLine("Consumer started");
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // Путь к расположению appsettings.json
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Добавление файла
+                .Build();
 
-            var factory = new ConnectionFactory
+            Console.WriteLine("Consumer started");
+            var rabbitMqSettings = configuration.GetSection("RabbitMQ");
+
+           
+            _factory = new ConnectionFactory
             {
-                HostName = "localhost"
+                HostName = rabbitMqSettings["HostName"],
+                UserName = rabbitMqSettings["UserName"],
+                Password = rabbitMqSettings["Password"]
             };
 
-
-            var connection = await factory.CreateConnectionAsync();
+            var connection = await _factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
 
             await DeclareTopologyAsync(channel);

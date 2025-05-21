@@ -1,0 +1,36 @@
+﻿@page
+@model RegistrationModel
+@{
+ViewData["Title"] = "РЕГИСТРАЦИЯ/АВТОРИЗАЦИЯ";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+<p>Вы вошли как: @User.Identity.Name</p>
+<form method="post" asp-page-handler="Logout">
+    <button type="submit" class="btn btn-danger">Выйти</button>
+</form>
+}
+else {
+<div class="text-center">
+    <h2>РЕГИСТРАЦИЯ/АВТОРИЗАЦИЯ</h2>
+    <form method="post">
+        <div class="form-group">
+            <label for="username">Логин:</label>
+            <input type="text" id="username" name="username" required class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required class="form-control" />
+        </div>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+        <p class="text-danger">@Model.ErrorMessage</p>
+        }
+        <div class="form-group">
+            <button type="submit" name="action" value="register" class="btn btn-primary">Зарегистрироваться</button>
+            <button type="submit" name="action" value="login" class="btn btn-success">Войти</button>
+        </div>
+    </form>
+</div>
+}

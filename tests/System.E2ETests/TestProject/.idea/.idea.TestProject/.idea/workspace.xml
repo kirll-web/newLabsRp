@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="05ff5f0e-f537-441b-9176-63136fe6ca73" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../Valuator/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../docker_compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.TestProject/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.TestProject/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.TestProject/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/global.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../e2e/.idea/.idea.e2e/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../e2e/.idea/.idea.e2e/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../e2e/.idea/.idea.e2e/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../e2e/.idea/.idea.e2e/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../e2e/global.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Hub/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Hub/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Hub/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Hub/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RankCalculator/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RankCalculator/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RankCalculator/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RankCalculator/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RankCalculator/RankCalculator.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RankCalculator/RankCalculator.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RankCalculator/tests/RankCalculator.tests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RankCalculator/tests/RankCalculator.tests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Valuator/Pages/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Valuator/Pages/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Valuator/Pages/Index.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Valuator/Pages/Index.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Valuator/Pages/Summary.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Valuator/Pages/Summary.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Valuator/Pages/Summary.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Valuator/Pages/Summary.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Valuator/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Valuator/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Valuator/RankCalculator.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../ds-2025.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/../../../ds-2025.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../nginx/logs/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/../../../nginx/logs/error.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../nginx/logs/nginx.pid" beforeDir="false" afterPath="$PROJECT_DIR$/../../../nginx/logs/nginx.pid" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///AIAssistantSnippet." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet." root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2wxo9fdAAiHLd15F5EIX2u3kqHU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;pa7&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="05ff5f0e-f537-441b-9176-63136fe6ca73" name="Changes" comment="" />
+      <created>1746992435963</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746992435963</updated>
+      <workItem from="1746992437363" duration="789000" />
+      <workItem from="1746993245705" duration="823000" />
+      <workItem from="1746994367182" duration="189000" />
+      <workItem from="1747286368986" duration="121000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

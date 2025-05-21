@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using StackExchange.Redis;
 
 namespace Valuator.Pages;
@@ -7,7 +8,7 @@ public class SummaryModel : PageModel
 {
     private readonly IDatabase _redisDb;
     private readonly ILogger<SummaryModel> _logger;
-
+    
     public SummaryModel(ILogger<SummaryModel> logger, IConnectionMultiplexer redis)
     {
         _logger = logger;
@@ -18,8 +19,22 @@ public class SummaryModel : PageModel
     public double Similarity { get; set; }
     public string Id { get; set; }
 
-    public async Task OnGetAsync(string id)
+
+    public async Task<IActionResult> 
+        OnGetAsync(string id)
     {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToPage("/Registration");
+        }
+        string? author = _redisDb.StringGet($"AUTHOR-{id}");
+     
+        if (string.IsNullOrEmpty(author) || author != User.Identity.Name)
+        {
+            // Автор не совпадает с текущим пользователем, доступ запрещён
+            return RedirectToPage("/Registration");// Перенаправляем пользователя на страницу с сообщением об ошибке
+        }
+
         Id = id;
         string rankKey = "RANK-" + id;
         string similarityKey = "SIMILARITY-" + id;
@@ -39,5 +54,7 @@ public class SummaryModel : PageModel
         _logger.LogInformation($"id : {id}SIMILARITY: {similarityValue}");
         Console.WriteLine($"OnGetAsync: {rankValue}");
         Similarity = double.Parse(similarityValue);
+        return Page(); // Возвращаем страницу в случае успеха
+
     }
 }

@@ -1,6 +1,8 @@
 using StackExchange.Redis;
 
 namespace Valuator;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 public class Program
 {
@@ -16,6 +18,14 @@ public class Program
 
         builder.Services.AddRazorPages();
         builder.Services.AddSignalR();
+        
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Registration"; // Перенаправление при неавторизованном доступе
+                options.ExpireTimeSpan = TimeSpan.FromDays(2); // Срок действия куки
+            });
+
 
         var app = builder.Build();
 
