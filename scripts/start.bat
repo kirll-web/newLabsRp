@@ -31,6 +31,6 @@ start "RankCalculator 1" dotnet run
 cd ../EventsLogger
 start "EventsLogger 1" dotnet run 
 timeout /t 10 /nobreak >nul 
-start "EventsLogger 2" dotnet run --no-build --project EventsLogger
+start "EventsLogger 2" dotnet run --no-build
 
 cd ../scripts

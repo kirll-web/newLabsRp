@@ -20,8 +20,7 @@ public class SummaryModel : PageModel
     public string Id { get; set; }
 
 
-    public async Task<IActionResult> 
-        OnGetAsync(string id)
+    public async Task<IActionResult> OnGetAsync(string id)
     {
         if (!User.Identity.IsAuthenticated)
         {
@@ -31,8 +30,7 @@ public class SummaryModel : PageModel
      
         if (string.IsNullOrEmpty(author) || author != User.Identity.Name)
         {
-            // Автор не совпадает с текущим пользователем, доступ запрещён
-            return RedirectToPage("/Registration");// Перенаправляем пользователя на страницу с сообщением об ошибке
+            return RedirectToPage("/AccessDenied");
         }
 
         Id = id;
@@ -54,7 +52,7 @@ public class SummaryModel : PageModel
         _logger.LogInformation($"id : {id}SIMILARITY: {similarityValue}");
         Console.WriteLine($"OnGetAsync: {rankValue}");
         Similarity = double.Parse(similarityValue);
-        return Page(); // Возвращаем страницу в случае успеха
+        return Page(); 
 
     }
 }

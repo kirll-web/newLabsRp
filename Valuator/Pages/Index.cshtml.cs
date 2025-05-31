@@ -30,7 +30,6 @@ public class IndexModel : PageModel
             UserName = _configuration["RabbitMQ:UserName"],
             Password = _configuration["RabbitMQ:Password"]
         };
-        
     }
     
     public IActionResult OnGet()
@@ -65,21 +64,19 @@ public class IndexModel : PageModel
         CancellationTokenSource cts = new CancellationTokenSource();
         Task produceTask = ProduceAsync(cts.Token, id);
 
-        await produceTask; // Дожидаемся завершения ProduceAsync
+        await produceTask; 
         cts.Cancel();
     }
 
 
     private async Task ProduceAsync(CancellationToken ct, string id)
     {
-        // Установка соединения с RabbitMQ по адресу localhost:5672
 
         await using IConnection connection = await _factory.CreateConnectionAsync(ct);
         await using IChannel channel = await connection.CreateChannelAsync(null, ct);
 
         await DeclareTopologyAsync(channel, ct);
 
-        // Отправка сообщения ежесекундно в цикле.
         string message = $"{id}";
         byte[] body = Encoding.UTF8.GetBytes(message);
 

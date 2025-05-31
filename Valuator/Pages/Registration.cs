@@ -30,7 +30,6 @@ public class RegistrationModel : PageModel
 
         if (action == "register")
         {
-            // Логика регистрации
             if (_redisDb.KeyExists($"USER-{username}"))
             {
                 ErrorMessage = "Пользователь с таким логином уже существует.";
@@ -40,12 +39,11 @@ public class RegistrationModel : PageModel
             var hashedPassword = HashPassword(password);
             _redisDb.StringSet($"USER-{username}", hashedPassword);
 
-            // Перенаправляем на главную страницу после успешной регистрации
+            
             return RedirectToPage("Index");
         }
         else if (action == "login")
         {
-            // Логика авторизации
             var storedPassword = _redisDb.StringGet($"USER-{username}");
             if (string.IsNullOrEmpty(storedPassword))
             {
@@ -60,39 +58,39 @@ public class RegistrationModel : PageModel
                 return Page();
             }
 
-            // Создаём claims для пользователя
+            
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username)
             };
 
-            // Создаём claimsIdentity
+            
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // Устанавливаем куки
+            
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 new AuthenticationProperties
                 {
-                    IsPersistent = true, // Куки сохраняются при закрытии браузера
-                    ExpiresUtc = DateTime.UtcNow.AddDays(7) // Время действия куки
+                    IsPersistent = true, 
+                    ExpiresUtc = DateTime.UtcNow.AddDays(7) 
                 });
 
-            // Авторизация успешна, перенаправляем на главную страницу
+            
             return RedirectToPage("Index");
         }
 
-        // Если действие не распознано
+        
         ErrorMessage = "Произошла ошибка обработки запроса.";
         return Page();
     }
 
     public async Task<IActionResult> OnPostLogoutAsync()
     {
-        // Удаляем куки и удаляем аутентификацию
+        
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-        // Перенаправляем обратно на страницу авторизации
+        
         return RedirectToPage("Registration");
     }
 

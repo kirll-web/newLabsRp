@@ -12,7 +12,6 @@
             .withUrl("http://localhost:5005/processing-hub")
             .build();
 
-        // Подписываемся на уведомления
         connection.on("Receive", function(message)  {
             document.querySelector('#RankCalculated').textContent = message;
         });

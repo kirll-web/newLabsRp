@@ -33,8 +33,6 @@ public class Program
         {
             app.UseExceptionHandler("/Error");
         }
-    
-        // app.MapHub<ProcessingHub>("http://localhost:5005/processing-hub");   
         
         app.UseStaticFiles();
   

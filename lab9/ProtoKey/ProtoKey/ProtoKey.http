@@ -1,0 +1,6 @@
+@ProtoKey_HostAddress = http://localhost:5215
+
+GET {{ProtoKey_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
